@@ -1,6 +1,7 @@
 const express = require('express')
 const ejsMate = require('ejs-mate')
 const mongoose = require('mongoose')
+const res = require('express/lib/response')
 const app = express()
 
 mongoose.connect('mongo://hamzarezig:long@quizapp.yplve.mongodb.net/QuizApp')
@@ -20,6 +21,10 @@ app.use(express.static('static'))
 
 app.get('/',(req,res) => {
 	res.render('pages/home')
+})
+
+app.get('/login',(req,res) => {
+	res.render('pages/login')
 })
 
 app.listen(3000,() => {
