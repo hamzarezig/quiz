@@ -1,3 +1,3 @@
 # quiz webapp using express js
 
-tis is my first project using express
+this is my first project using express
