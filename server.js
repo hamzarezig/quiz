@@ -3,7 +3,7 @@ const ejsMate = require('ejs-mate')
 const mongoose = require('mongoose')
 const app = express()
 
-mongoose.connect('mongo://hamzarezig:long@quizapp.yplve.mongodb.net/myFirstDatabase')
+mongoose.connect('mongo://hamzarezig:long@quizapp.yplve.mongodb.net/QuizApp')
 .then(() => {
 	console.log('work')
 })
