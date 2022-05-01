@@ -1,7 +1,15 @@
 const express = require('express')
 const ejsMate = require('ejs-mate')
+const mongoose = require('mongoose')
 const app = express()
 
+mongoose.connect('mongo://hamzarezig:long@quizapp.yplve.mongodb.net/myFirstDatabase')
+.then(() => {
+	console.log('work')
+})
+.catch(() => {
+	console.log('no');
+})
 
 app.engine('ejs',ejsMate)
 
