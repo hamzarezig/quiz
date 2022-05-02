@@ -1,7 +1,17 @@
 <% layout('base') %>
 <h1>Sign up</h1>
 <form method="post" action="register">
-	<input type="text" name="username" placeholder="Username..." required>
-	<input type="email" name="email" placeholder="Email..." required>
-	<input type="password" name="password" placeholder="Password..." required>
+	<div class="mb-3">
+    	<label for="exampleInputEmail1">Email address</label>
+    	<input type="email" name="email" class="form-control" id="exampleInputEmail1" placeholder="Email...">
+  	</div>
+    <div class="mb-3">
+        <label for="formGroupExampleInput" class="form-label">Username</label>
+        <input type="text" name="username" class="form-control" id="formGroupExampleInput" placeholder="Username...">
+    </div>
+    <div class="mb-3">
+        <label for="formGroupExampleInput2" class="form-label">Password</label>
+        <input type="password" name="password" class="form-control" id="formGroupExampleInput2" placeholder="Password...">
+    </div>
+    <button type="submit" class="btn btn-primary">Sign up</button>
 </form>
