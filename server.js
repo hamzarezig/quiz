@@ -1,15 +1,17 @@
 const express = require('express')
 const ejsMate = require('ejs-mate')
 const mongoose = require('mongoose')
-const res = require('express/lib/response')
 const app = express()
+mongoose.Promise = global.Promise
 
-mongoose.connect('mongo://hamzarezig:long@quizapp.yplve.mongodb.net/QuizApp')
+
+mongoose.connect('mongodb+srv://hamzarezig:long@quizapp.yplve.mongodb.net/myFirstDatabase?retryWrites=true&w=majority')
 .then(() => {
-	console.log('work')
+	console.log('Mongodb connected succesfully')
 })
-.catch(() => {
-	console.log('no');
+.catch(e => {
+	console.log('Mongodb connection error !!!')
+	console.log(e)
 })
 
 app.engine('ejs',ejsMate)
