@@ -2,10 +2,10 @@ const express = require('express')
 const ejsMate = require('ejs-mate')
 const mongoose = require('mongoose')
 const app = express()
-mongoose.Promise = global.Promise
 
 
-mongoose.connect('mongodb+srv://hamzarezig:long@quizapp.yplve.mongodb.net/myFirstDatabase?retryWrites=true&w=majority')
+
+mongoose.connect('mongodb://hamzarezig:long@quizapp.yplve.mongodb.net/myFirstDatabase?retryWrites=true&w=majority')
 .then(() => {
 	console.log('Mongodb connected succesfully')
 })
