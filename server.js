@@ -29,6 +29,10 @@ app.get('/login',(req,res) => {
 	res.render('pages/login')
 })
 
+app.get('/register',(req,res) => {
+	res.render('pages/register')
+})
+
 app.listen(3000,() => {
 	console.log('Server is working on http://localhost:3000')
 })
