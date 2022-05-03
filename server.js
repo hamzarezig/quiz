@@ -1,7 +1,7 @@
 const express = require('express')
 const ejsMate = require('ejs-mate')
 const mongoose = require('mongoose')
-const flash = require('flash')
+const flash = require('connect-flash')
 const session = require('express-session')
 const authFormMiddlewares = require('./middleware/authFormMiddlewares')
 const app = express()
@@ -44,10 +44,13 @@ app.get('/register',(req,res) => {
 })
 
 app.post('/register',authFormMiddlewares.isValidRegisterForm,authFormMiddlewares.usernameAndEmailNotInUse,(req,res) => {
-	//
-	res.send('work')
+	req.flash('success','You successfully singed up ,now you can sign in')
+	res.redirect('/login')
 })
 
+app.post('/login',authFormMiddlewares.isValidLoginForm,authFormMiddlewares.usernameAndPasswordCorrect,(req,res) => {
+	res.send('work')
+})
 app.listen(3000,() => {
 	console.log('Server is working on http://localhost:3000')
 })
