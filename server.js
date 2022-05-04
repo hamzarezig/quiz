@@ -7,78 +7,106 @@ const authFormMiddlewares = require('./middleware/authFormMiddlewares')
 const User = require('./models/user')
 const app = express()
 
+//to remove
+const emailvalidator = require("email-validator");
+
+
 mongoose.connect('mongodb+srv://hamzarezig:long@quizapp.yplve.mongodb.net/myFirstDatabase?retryWrites=true&w=majority')
-.then(() => {
-	console.log('Mongodb connected succesfully')
-})
-.catch(e => {
-	console.log('Mongodb connection error !!!')
-	console.log(e)
-})
+	.then(() => {
+		console.log('Mongodb connected succesfully')
+	})
+	.catch(e => {
+		console.log('Mongodb connection error !!!')
+		console.log(e)
+	})
 
-app.engine('ejs',ejsMate)
+app.engine('ejs', ejsMate)
 
-app.set('views',__dirname+'/templates')
-app.set('view engine','ejs')
+app.set('views', __dirname + '/templates')
+app.set('view engine', 'ejs')
 
-app.use(express.urlencoded({extended:true}))
+app.use(express.urlencoded({ extended: true }))
 app.use(express.static('static'))
 app.use(session({
-	secret:'thisisdevsecret',
+	secret: 'thisisdevsecret',
 	resave: false,
 	saveUninitialized: true
 }))
 app.use(flash())
 
-app.use((req,res,next) => {
-	res.locals.success=req.flash('success')
-	res.locals.error=req.flash('error')
+app.use((req, res, next) => {
+	res.locals.success = req.flash('success')
+	res.locals.error = req.flash('error')
 	next()
 })
 
-app.get('/',(req,res) => {
+app.get('/', (req, res) => {
 	res.render('pages/home')
 })
 
-app.get('/login',(req,res) => {
+app.get('/login', (req, res) => {
 	res.render('pages/login')
 })
 
-app.get('/register',(req,res) => {
+app.get('/register', (req, res) => {
 	res.render('pages/register')
 })
 
 app.post('/register',
-authFormMiddlewares.isValidRegisterForm,
-async (req,res) => {
-user = await User.find({username:req.body.username})
-	console.log("user",user)
-        if(user&&user[0].username){
-		console.log("if condition")
-                //req.flash('error','Email or username are alredy in use')
-                return res.redirect('/register')
-        }
-        else {
-		console.log("else")
-                /*try{*/
-		newUser = await User.create({
-			username:req.body.username,
-			email:req.body.email,
-			password:req.body.password
-		})
-		req.flash('success',`You successfully singed up as ${newUser.username},now you can sign in`)
-		res.redirect('/login')
+	async (req, res) => {
+		let email = req.body.password;
+		let username = req.body.username;
+		let password = req.body.password;
+		if (username && password && email) {
+			if (username.replace(/\s+/g, '') !== '' && email.replace(/\s+/g, '') !== '') {
+				if (emailvalidator.validate(req.body.email)) {
+					if (/^[a-zA-Z0-9_]{3,15}$/.test(username)) {
+						//next()
+						//normal middleware
+						user = await User.find({ username: req.body.username })
+						console.log("user", user)
+						if (user[0] && user[0].username) {
+							console.log("if condition")
+							req.flash('error','Email or username are alredy in use')
+							return res.redirect('/register')
+						}
+						else {
+							console.log("else")
+							/*try{*/
+							newUser = await User.create({
+								username: req.body.username,
+								email: req.body.email,
+								password: req.body.password
+							})
+							req.flash('success', `You successfully singed up as ${newUser.username},now you can sign in`)
+							res.redirect('/login')
 /*	}
 	catch (e){
 		console.log(e);
 		req.flash('error','oops ,an error in the server try again later ')
 		res.redirect('/register')
 	}*/}
-})
+					} else {
+						req.flash('error', 'Username must be AlphaNumeric (Letters or Numbers), Underscore and must contain 3 to 15 characters')
+						res.redirect('/register')
+					}
+				} else {
+					req.flash("error", 'Give a valid email')
+					res.redirect('/register')
+				}
+			} else {
+				req.flash("error", 'Form must not be empty')
+				res.redirect('/register')
+			}
+		} else {
+			req.flash("error", 'Form must not be empty')
+			res.redirect('/register')
+		}
+	})
 
-app.post('/login',authFormMiddlewares.isValidLoginForm,authFormMiddlewares.usernameAndPasswordCorrect,(req,res) => {
+app.post('/login', authFormMiddlewares.isValidLoginForm, authFormMiddlewares.usernameAndPasswordCorrect, (req, res) => {
 	res.send('work')
 })
-app.listen(3000,() => {
+app.listen(3000, () => {
 	console.log('Server is working on http://localhost:3000')
 })
