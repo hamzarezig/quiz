@@ -30,8 +30,9 @@ module.exports.isValidRegisterForm = (req,res,next) => {
 }
 
 module.exports.usernameAndEmailNotInUse = async (req,res,next) => {
-	user = await User.find({username:req.body.username})
-	if(user.length&&user[0].username){
+	u_user = await User.find({username:req.body.username})
+	e_user = await User.find({email:req.body.email})
+	if(e_user.length&&e_user[0].email||u_user.length&&u_user[0].username){
 		req.flash('error','Email or username are alredy in use')
         res.redirect('/register')
 	}
