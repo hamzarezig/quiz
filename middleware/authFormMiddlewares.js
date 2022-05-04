@@ -26,14 +26,14 @@ module.exports.isValidRegisterForm = (req,res,next) => {
 		req.flash("error",'Form must not be empty')
 		res.redirect('/register')
 	}
-	next()
+	
 }
 
 module.exports.usernameAndEmailNotInUse = async (req,res,next) => {
 	user = await User.find({username:req.body.username})
-	if(user&&user.username){
+	if(user.length&&user[0].username){
 		req.flash('error','Email or username are alredy in use')
-                res.render('/login')
+        res.redirect('/register')
 	}
 	else {
 		next()
