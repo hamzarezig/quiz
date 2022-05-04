@@ -1,4 +1,5 @@
 const emailvalidator = require("email-validator");
+const User = require('../models/user')
 
 module.exports.isValidRegisterForm = (req,res,next) => {
 	let email = req.body.password;
@@ -28,7 +29,21 @@ module.exports.isValidRegisterForm = (req,res,next) => {
 	next()
 }
 
-module.exports.usernameAndEmailNotInUse = (req,res,next) => {
-	//this is for testing purpeses
+module.exports.usernameAndEmailNotInUse = async (req,res,next) => {
+	user = await User.find({username:req.body.username})
+	if(user&&user.username){
+		req.flash('error','Email or username are alredy in use')
+                res.render('/login')
+	}
+	else {
+		next()
+	}
+}
+
+module.exports.isValidLoginForm = (req,res,next) => {
+	next()
+}
+
+module.exports.usernameAndPasswordCorrect = (req,res,next) => {
 	next()
 }

@@ -4,6 +4,7 @@ const mongoose = require('mongoose')
 const flash = require('connect-flash')
 const session = require('express-session')
 const authFormMiddlewares = require('./middleware/authFormMiddlewares')
+const User = require('./models/user')
 const app = express()
 
 mongoose.connect('mongodb+srv://hamzarezig:long@quizapp.yplve.mongodb.net/myFirstDatabase?retryWrites=true&w=majority')
@@ -22,7 +23,11 @@ app.set('view engine','ejs')
 
 app.use(express.urlencoded({extended:true}))
 app.use(express.static('static'))
-app.use(session({secret:'thisisdevsecret'}))
+app.use(session({
+	secret:'thisisdevsecret',
+	resave: false,
+	saveUninitialized: true
+}))
 app.use(flash())
 
 app.use((req,res,next) => {
@@ -43,9 +48,32 @@ app.get('/register',(req,res) => {
 	res.render('pages/register')
 })
 
-app.post('/register',authFormMiddlewares.isValidRegisterForm,authFormMiddlewares.usernameAndEmailNotInUse,(req,res) => {
-	req.flash('success','You successfully singed up ,now you can sign in')
-	res.redirect('/login')
+app.post('/register',
+authFormMiddlewares.isValidRegisterForm,
+async (req,res) => {
+user = await User.find({username:req.body.username})
+	console.log("user",user)
+        if(user&&user[0].username){
+		console.log("if condition")
+                //req.flash('error','Email or username are alredy in use')
+                return res.redirect('/register')
+        }
+        else {
+		console.log("else")
+                /*try{*/
+		newUser = await User.create({
+			username:req.body.username,
+			email:req.body.email,
+			password:req.body.password
+		})
+		req.flash('success',`You successfully singed up as ${newUser.username},now you can sign in`)
+		res.redirect('/login')
+/*	}
+	catch (e){
+		console.log(e);
+		req.flash('error','oops ,an error in the server try again later ')
+		res.redirect('/register')
+	}*/}
 })
 
 app.post('/login',authFormMiddlewares.isValidLoginForm,authFormMiddlewares.usernameAndPasswordCorrect,(req,res) => {
