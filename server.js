@@ -3,8 +3,8 @@ const ejsMate = require('ejs-mate')
 const mongoose = require('mongoose')
 const flash = require('connect-flash')
 const session = require('express-session')
-const authFormMiddlewares = require('./middleware/authFormMiddlewares')
 const User = require('./models/user')
+const authRoutes = require('./routes/auth')
 const app = express()
 
 mongoose.connect('mongodb+srv://hamzarezig:long@quizapp.yplve.mongodb.net/myFirstDatabase?retryWrites=true&w=majority')
@@ -40,40 +40,8 @@ app.get('/', (req, res) => {
 	res.render('pages/home')
 })
 
-app.get('/login', (req, res) => {
-	res.render('pages/login')
-})
+app.use('/',authRoutes)
 
-app.get('/register', (req, res) => {
-	res.render('pages/register')
-})
-
-app.post('/register',
-	authFormMiddlewares.isValidRegisterForm,
-	authFormMiddlewares.usernameAndEmailNotInUse,
-	async (req, res) => {
-		try {
-			newUser = await User.create({
-				username: req.body.username,
-				email: req.body.email,
-				password: req.body.password
-			})
-			req.flash('success', `You successfully singed up as ${newUser.username},now you can sign in`)
-			res.redirect('/login')
-		}
-		catch (e) {
-			console.log(e);
-			req.flash('error', 'oops ,an error in the server try again later ')
-			res.redirect('/register')
-		}
-	})
-
-app.post('/login',
-	authFormMiddlewares.isValidLoginForm,
-	authFormMiddlewares.usernameAndPasswordCorrect,
-	(req, res) => {
-		res.send('work')
-})
 app.listen(3000, () => {
 	console.log('Server is working on http://localhost:3000')
 })
