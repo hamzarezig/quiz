@@ -26,7 +26,6 @@ module.exports.isValidRegisterForm = (req,res,next) => {
 		req.flash("error",'Form must not be empty')
 		res.redirect('/register')
 	}
-	
 }
 
 module.exports.usernameAndEmailNotInUse = async (req,res,next) => {
@@ -34,7 +33,7 @@ module.exports.usernameAndEmailNotInUse = async (req,res,next) => {
 	e_user = await User.find({email:req.body.email})
 	if(e_user.length&&e_user[0].email||u_user.length&&u_user[0].username){
 		req.flash('error','Email or username are alredy in use')
-        res.redirect('/register')
+	        res.redirect('/register')
 	}
 	else {
 		next()
@@ -42,9 +41,30 @@ module.exports.usernameAndEmailNotInUse = async (req,res,next) => {
 }
 
 module.exports.isValidLoginForm = (req,res,next) => {
-	next()
+	let username = req.body.username;                 let password = req.body.password;
+	if(username&&password){
+		if(/^[a-zA-Z0-9_]{3,15}$/.test(username)){
+			next()
+		}
+		else{
+			req.flash('error','Give a valid username')
+			res.redirect('/login')
+		}
+	}
+	else{
+		req.flash('error','Not a valid login form')
+		res.redirect('/login')
+	}
 }
 
-module.exports.usernameAndPasswordCorrect = (req,res,next) => {
-	next()
+module.exports.usernameAndPasswordCorrect = async (req,res,next) => {
+	let username = req.body.username;                 let password = req.body.password;
+	user = await User.find({username:username,password:password})
+	if(user.length){
+		next()
+	}
+	else{
+		req.flash('error','Invalid username or password')
+		res.redirect('/login')
+	}
 }

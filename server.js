@@ -7,10 +7,6 @@ const authFormMiddlewares = require('./middleware/authFormMiddlewares')
 const User = require('./models/user')
 const app = express()
 
-//to remove
-const emailvalidator = require("email-validator");
-
-
 mongoose.connect('mongodb+srv://hamzarezig:long@quizapp.yplve.mongodb.net/myFirstDatabase?retryWrites=true&w=majority')
 	.then(() => {
 		console.log('Mongodb connected succesfully')
@@ -72,8 +68,11 @@ app.post('/register',
 		}
 	})
 
-app.post('/login', authFormMiddlewares.isValidLoginForm, authFormMiddlewares.usernameAndPasswordCorrect, (req, res) => {
-	res.send('work')
+app.post('/login',
+	authFormMiddlewares.isValidLoginForm,
+	authFormMiddlewares.usernameAndPasswordCorrect,
+	(req, res) => {
+		res.send('work')
 })
 app.listen(3000, () => {
 	console.log('Server is working on http://localhost:3000')
