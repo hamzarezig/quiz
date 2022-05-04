@@ -5,6 +5,7 @@ const flash = require('connect-flash')
 const session = require('express-session')
 const User = require('./models/user')
 const authRoutes = require('./routes/auth')
+const authCheckers = require('./middleware/authCheckers')
 const app = express()
 
 mongoose.connect('mongodb+srv://hamzarezig:long@quizapp.yplve.mongodb.net/myFirstDatabase?retryWrites=true&w=majority')
@@ -36,11 +37,11 @@ app.use((req, res, next) => {
 	next()
 })
 
-app.get('/', (req, res) => {
+app.get('/',authCheckers.isLoggedIn,(req, res) => {
 	res.render('pages/home')
 })
 
-app.use('/',authRoutes)
+app.use('/',authCheckers.isNotLoggedIn,authRoutes)
 
 app.listen(3000, () => {
 	console.log('Server is working on http://localhost:3000')

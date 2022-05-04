@@ -1,6 +1,7 @@
 const express = require('express')
 const route = express.Router()
 const authFormMiddlewares = require('../middleware/authFormMiddlewares')
+const User = require('../models/user')
 
 route.get('/register',(req,res) => {
 	res.render('pages/register')
@@ -31,8 +32,18 @@ route.get('/login',(req,res) => {
 route.post('/login',
 	authFormMiddlewares.isValidLoginForm,
         authFormMiddlewares.usernameAndPasswordCorrect,
-        (req, res) => {
-                res.send('work')
+        async (req, res) => {
+		try{
+			let username = req.body.username
+			user = await User.find({username:username})
+			req.session.u_id=user[0]._id
+			req.flash('success','Welcome back ,you logged in successfully')
+			res.redirect('/')
+		}
+                catch (e) {
+			req.flash('error','opps ,server error during opperation try again later')
+			res.redirect('/login')
+		}
 	})
 
 module.exports=route
