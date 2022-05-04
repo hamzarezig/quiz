@@ -41,6 +41,12 @@ app.get('/',authCheckers.isLoggedIn,(req, res) => {
 	res.render('pages/home')
 })
 
+app.get('/logout',authCheckers.isLoggedIn,(req, res) => {
+        req.session.u_id = null
+	req.flash('success','Successfully logout')
+	res.redirect('/login')
+})
+
 app.use('/',authCheckers.isNotLoggedIn,authRoutes)
 
 app.listen(3000, () => {
