@@ -38,9 +38,8 @@ app.use((req, res, next) => {
 	next()
 })
 
-
-app.all('/',authCheckers.isNotLoggedIn,authRoutes)
-app.all('/home',authCheckers.isLoggedIn,homeRoutes)
+app.use(authRoutes)
+app.use(homeRoutes)
 
 app.listen(3000, () => {
 	console.log('Server is working on http://localhost:3000')

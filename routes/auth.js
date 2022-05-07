@@ -2,11 +2,15 @@ const express = require('express')
 const route = express.Router()
 const authFormMiddlewares = require('../middleware/authFormMiddlewares')
 const User = require('../models/user')
+const authCheckers = require('../middleware/authCheckers')
 
-route.get('/register',(req,res) => {
-	res.render('pages/register')
+route.get('/register',
+        authCheckers.isNotLoggedIn,
+        (req,res) => {
+        	res.render('pages/register')
 })
 route.post('/register',
+        authCheckers.isNotLoggedIn,
 	authFormMiddlewares.isValidRegisterForm,
         authFormMiddlewares.usernameAndEmailNotInUse,
         async (req, res) => {
@@ -26,10 +30,13 @@ route.post('/register',
                 }
         })
 
-route.get('/login',(req,res) => {
-	res.render('pages/login')
+route.get('/login',
+        authCheckers.isNotLoggedIn,
+        (req,res) => {
+        	res.render('pages/login')
 })
 route.post('/login',
+        authCheckers.isNotLoggedIn,
 	authFormMiddlewares.isValidLoginForm,
         authFormMiddlewares.usernameAndPasswordCorrect,
         async (req, res) => {
