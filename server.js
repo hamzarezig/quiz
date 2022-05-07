@@ -5,6 +5,7 @@ const flash = require('connect-flash')
 const session = require('express-session')
 const User = require('./models/user')
 const authRoutes = require('./routes/auth')
+const homeRoutes = require('./routes/home')
 const authCheckers = require('./middleware/authCheckers')
 const app = express()
 
@@ -37,17 +38,9 @@ app.use((req, res, next) => {
 	next()
 })
 
-app.get('/',authCheckers.isLoggedIn,(req, res) => {
-	res.render('pages/home')
-})
 
-app.get('/logout',authCheckers.isLoggedIn,(req, res) => {
-        req.session.u_id = null
-	req.flash('success','Successfully logout')
-	res.redirect('/login')
-})
-
-app.use('/',authCheckers.isNotLoggedIn,authRoutes)
+app.all('/',authCheckers.isNotLoggedIn,authRoutes)
+app.all('/home',authCheckers.isLoggedIn,homeRoutes)
 
 app.listen(3000, () => {
 	console.log('Server is working on http://localhost:3000')
