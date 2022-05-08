@@ -26,7 +26,8 @@ QuizSchema = new mongoose.Schema({
 			type:String,
 			enum:['A','B','C'],
 			required:true
-		}
+		},
+		_id:false
 	}]
 })
 

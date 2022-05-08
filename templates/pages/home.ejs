@@ -1,2 +1,5 @@
 <% layout('base') %>
 <h1>home page</h1>
+<% for(quiz of quizList) { %>
+	<p><%= quiz.name %>:<a href="quiz?id=<%=quiz._id %>">answer quiz</a></p>
+<% } %>
