@@ -26,7 +26,7 @@ route.get('/quiz',
                 userAn = await user.findById(req.session.u_id)
                 alreadyAnswered=false
                 for(ques of userAn.answered){
-                        if(ques.id==fullQuiz._id){
+                        if(ques.id.equals(fullQuiz._id)){
                                 alreadyAnswered=true
                         }
                 }
