@@ -23,7 +23,14 @@ route.get('/quiz',
 	authCheckers.isLoggedIn,
 	async (req,res) => {
 		fullQuiz = await quiz.findById(req.query.id)
-		res.render('pages/quiz',{ fullQuiz })
+                userAn = await user.findById(req.session.u_id)
+                alreadyAnswered=false
+                for(ques of userAn.answered){
+                        if(ques.id==fullQuiz._id){
+                                alreadyAnswered=true
+                        }
+                }
+		res.render('pages/quiz',{ fullQuiz:fullQuiz, alreadyAnswered:alreadyAnswered})
 })
 
 route.post('/quiz',

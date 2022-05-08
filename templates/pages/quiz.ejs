@@ -1,6 +1,9 @@
 <% layout('base') %>
 <h1>Quiz page</h1>
 <% if(Object.keys(fullQuiz).length) {  %>
+	<% if(alreadyAnswered) { %>
+		<p>already answered</p>
+	<% } %>  
 	<h3><%=fullQuiz.name%></h3>
 	<form method="post" action="quiz">
 		<input type="hidden" name="id" value="<%= fullQuiz._id %>">
