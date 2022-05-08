@@ -14,7 +14,17 @@ UserSchema = new mongoose.Schema({
 	password:{
 		type:String,
 		required:true
-	}
+	},
+	answered: [{
+		id:{
+			type:mongoose.Schema.ObjectId,
+			required:true
+		},
+		answeres:{
+			type:Object,
+			required:true
+		}
+	}]
 })
 
 module.exports = mongoose.model('User',UserSchema)

@@ -2,12 +2,16 @@
 <h1>Quiz page</h1>
 <% if(Object.keys(fullQuiz).length) {  %>
 	<h3><%=fullQuiz.name%></h3>
-	<% for(ques of fullQuiz.questions) { %>
-		<p><%= ques.name %></p>
-		<p>a:<input type="checkbox" ><%= ques.a%></p>
-		<p>b:<input type="checkbox" ><%= ques.b%></p>
-		<p>c:<input type="checkbox" ><%= ques.c%></p>
-	<% } %>
+	<form method="post" action="quiz">
+		<input type="hidden" name="id" value="<%= fullQuiz._id %>">
+		<% for(ques of fullQuiz.questions) { %>
+			<p><%= ques.name %></p>
+			<p>a <input type="radio" name="answers[<%= ques._id %>]" value="A"><%= ques.a%></p>
+			<p>b <input type="radio" name="answers[<%= ques._id %>]" value="B"><%= ques.b%></p>
+			<p>c <input type="radio" name="answers[<%= ques._id %>]" value="C"><%= ques.c%></p>
+		<% } %>
+		<input type="submit" value="answer">
+	</form>
 <% } else { %>
 	<h2>oops! no quiz found</h2>
 <% } %>
