@@ -24,7 +24,12 @@ UserSchema = new mongoose.Schema({
 			type:Object,
 			required:true
 		}
-	}]
+	}],
+	isAdmin:{
+		type:Boolean,
+		required:true,
+		default:false
+	}
 })
 
 module.exports = mongoose.model('User',UserSchema)

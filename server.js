@@ -6,6 +6,7 @@ const session = require('express-session')
 const User = require('./models/user')
 const authRoutes = require('./routes/auth')
 const homeRoutes = require('./routes/home')
+const adminRoutes = require('./routes/admin')
 const authCheckers = require('./middleware/authCheckers')
 const app = express()
 
@@ -40,6 +41,7 @@ app.use((req, res, next) => {
 
 app.use(authRoutes)
 app.use(homeRoutes)
+app.use('/admin',adminRoutes)
 
 app.listen(3000, () => {
 	console.log('Server is working on http://localhost:3000')

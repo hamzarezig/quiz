@@ -1,0 +1,6 @@
+<% layout('base') %>
+<h1>admin page</h1>
+<% for(quiz of quizList) { %>
+	<p><%= quiz.name %>:<a href="admin/addques?id=<%=quiz._id %>">add questions</a></p>
+<% } %>
+
